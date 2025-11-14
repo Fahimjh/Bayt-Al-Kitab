@@ -8,7 +8,7 @@ const BookSchema = new mongoose.Schema({
   coverImage: String,
   pdfUrl: String,
   uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
+  status: { type: String, enum: ["pending", "approved", "rejected", "delete_requested"], default: "pending" },
   createdAt: { type: Date, default: Date.now }
 });
 
