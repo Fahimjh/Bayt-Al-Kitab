@@ -1,5 +1,5 @@
 {
-  "name": "bookshop-server",
+  "name": "bayt-al-kitab-server",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
