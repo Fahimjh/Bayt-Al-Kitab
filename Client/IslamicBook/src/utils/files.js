@@ -9,7 +9,7 @@ export function buildFileUrl(raw) {
   const base =
     (axios && axios.defaults && axios.defaults.baseURL
       ? String(axios.defaults.baseURL).replace(/\/api\/?$/, "")
-      : process.env.REACT_APP_API_URL || "http://localhost:5000");
+      : (import.meta?.env?.VITE_API_URL || "http://localhost:5000").replace(/\/api\/?$/, ""));
   return `${base}${p}`;
 }
 export default buildFileUrl;
