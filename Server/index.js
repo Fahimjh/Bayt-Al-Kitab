@@ -16,13 +16,16 @@ const __dirname = path.dirname(__filename);
 // create express app
 const app = express();
 
-// allow your frontend origin, credentials and common headers
+// allow frontend origin(s) via env or allow all if not set
+const allowedOrigins = (process.env.CORS_ORIGINS || "").split(",").map(s=>s.trim()).filter(Boolean);
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://bayt-al-kitab.vercel.app"
-    ],
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      if (allowedOrigins.length === 0) return cb(null, true);
+      if (allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(null, false);
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
