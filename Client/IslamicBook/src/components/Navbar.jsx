@@ -126,9 +126,9 @@ export default function Navbar(props) {
                   <div className="mt-4 mx-auto" style={{ maxWidth: "32rem" }}>
                     <SearchBar
                       value={searchQ}
-                      onSearch={(q) => handleSearch(q)}
+                      onChange={setSearchQ}
+                      onSearch={handleSearch}
                       className="w-full"
-                      inputClassName="w-full bg-white text-gray-800 placeholder-gray-500 text-sm"
                     />
                   </div>
 
