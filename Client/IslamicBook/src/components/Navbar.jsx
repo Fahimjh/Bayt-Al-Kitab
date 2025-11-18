@@ -98,13 +98,9 @@ export default function Navbar(props) {
 
   return (
     <>
-      {/* show chips normally (no custom scrollbar hiding) */}
-
       <nav className="bg-transparent px-6 py-4">
         <div className="max-w-screen-xl mx-auto">
-          {/* make center column flexible so chips have more room */}
           <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-4">
-            {/* left: signed-in */}
             <div className="flex items-center">
               {user ? (
                 <div className="text-sm text-gray-200">

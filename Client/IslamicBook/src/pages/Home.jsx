@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import API from "../utils/axios";
 import BookRow from "../components/BookRow";
 import buildFileUrl from "../utils/files";
 import { useAuth } from "../context/AuthContext";
+import SearchBar from "../components/SearchBar";
 
 const defaultCategories = [
   "Quran",
@@ -39,8 +40,7 @@ export default function Home() {
         const params = {};
         if (selectedCategory && selectedCategory !== "All")
           params.category = selectedCategory;
-        if (searchQ) params.search = searchQ;
-
+        // Don't send search param for instant search, filter client-side
         const res = await API.get("/books", { params });
         const withSrc = (res.data || []).map((b) => ({
           ...b,
@@ -48,14 +48,29 @@ export default function Home() {
         }));
         setBooks(withSrc);
       } catch (err) {
-        // ...existing code...
         setBooks([]);
       } finally {
         setLoading(false);
       }
     };
     fetchBooks();
-  }, [selectedCategory, searchQ]);
+  }, [selectedCategory]);
+
+  // Instant search: filter client-side
+  const filteredBooks = React.useMemo(() => {
+    if (!searchQ) return books;
+    const q = searchQ.toLowerCase();
+    return books.filter(
+      (b) =>
+        (b.title && b.title.toLowerCase().includes(q)) ||
+        (b.author && b.author.toLowerCase().includes(q))
+    );
+  }, [books, searchQ]);
+
+  // Handler for SearchBar
+  const handleSearch = useCallback((q) => {
+    setSearchQ(q);
+  }, []);
 
   // group books by category for rows
   const grouped = {};
@@ -65,14 +80,11 @@ export default function Home() {
     grouped[cat].push(b);
   });
 
-  const visibleBooks =
-    selectedCategory === "All"
-      ? books
-      : books.filter((b) => b.category === selectedCategory);
+
+  const visibleBooks = filteredBooks;
 
   return (
     <div className="p-4">
-      <div className="mb-1" />
 
       {user?.role === 'admin' && (
         <div className="flex items-center gap-3 mb-4">
